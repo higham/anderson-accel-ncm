@@ -16,14 +16,17 @@ Manchester, UK, August 2015.
 The main functions are
 
 * `nearcorr_aa`: the alternating projections method for computing the
-   nearest correlation matrix with Anderson acceleration.
+   nearest correlation matrix with Anderson acceleration.  It includes the
+   options of fixing elements and imposing a lower bound on the smallest
+   eigenvalue.
 
 * `nearcorr_new`: the alternating projections method for computing the
   nearest correlation matrix.  This is a version of the function at
   https://nickhigham.wordpress.com/2013/02/13/the-nearest-correlation-matrix/
   that has been modified to include the options of fixing elements and
   imposing a lower bound on the smallest eigenvalue.
-  It is given here for comparison with unaccelerated code.
+  This unaccelerated code is included for 
+  comparison with the accelerated code `nearcorr_aa`.
 
 Other M-files:
 
