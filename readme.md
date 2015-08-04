@@ -21,7 +21,8 @@ The main functions are
    eigenvalue.
 
 * `nearcorr_new`: the alternating projections method for computing the
-  nearest correlation matrix.  This is a version of the function at
+  nearest correlation matrix.  This is a version of the function `nearcorr`
+  at
   https://nickhigham.wordpress.com/2013/02/13/the-nearest-correlation-matrix/
   that has been modified to include the options of fixing elements and
   imposing a lower bound on the smallest eigenvalue.
