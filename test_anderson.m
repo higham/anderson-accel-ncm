@@ -30,12 +30,6 @@ for delta = deltas
     [XAA,itAA] = nearcorr_aa(A,pattern,m,100,'u',delta); 
     fprintf('Iterations for NCM: standard = %d, accelerated = %d.  Reduction factor = %.2f\n', it, itAA, it/itAA)
 
-    [X1,it] = nearcorr_new_orig(A,pattern,delta);
-    [XAA1,itAA] = nearcorr_aa_orig(A,pattern,m,100,'u',delta);
-    temp =  max( norm(X-X1,1)/norm(X1), norm(XAA-XAA1,1)/norm(XAA1) );
-    if temp > 0, fprintf('!!!!!!!!!!!!!!!! Max diff = %9.2e\n',temp), ...
-            beep, end
-    
 end
 
 fprintf('\n*** Test matrix 2 and the pattern of elements to keep fixed:\n')
@@ -57,11 +51,6 @@ for delta = deltas
     [XAA,itAA] = nearcorr_aa(A,pattern,m,100,'u',delta); 
     fprintf('Iterations for NCM: standard = %d, accelerated = %d.  Reduction factor = %.2f\n', it, itAA, it/itAA)
 
-    [X1,it] = nearcorr_new_orig(A,pattern,delta);
-    [XAA1,itAA] = nearcorr_aa_orig(A,pattern,m,100,'u',delta);
-    temp =  max( norm(X-X1,1)/norm(X1), norm(XAA-XAA1,1)/norm(XAA1) );
-    if temp > 0, fprintf('!!!!!!!!!!!!!!!! Max diff = %9.2e\n',temp), ...
-            beep, end
 end
 
 end
