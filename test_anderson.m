@@ -13,6 +13,7 @@ function test_anderson(m,deltas)
 if nargin < 2, deltas = [0 1e-8 0.1]; end
 if nargin < 1, m = 2; end
 
+f = get(0,'Format') % Save current format.
 format shortg, format compact
 
 fprintf('*** Test matrix 1:\n')
@@ -53,4 +54,4 @@ for delta = deltas
 
 end
 
-end
+format(f) % Restore original format.
