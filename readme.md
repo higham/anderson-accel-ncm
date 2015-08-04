@@ -1,13 +1,11 @@
-`anderson-accel-ncm` - MATLAB Codes for Anderson acceleration of the
-alternating projections method for the nearest correlation matrix.
+`anderson-accel-ncm` - MATLAB Codes for Anderson acceleration of the alternating projections method for the nearest correlation matrix
 ==========
 
 About
 -----
 
-`anderson-accel-ncm` contains MATLAB functions for repairing
-invalid (indefinite) covariance and correlation matrices, based on the
-paper
+`anderson-accel-ncm` contains MATLAB functions for repairing invalid
+(indefinite) correlation matrices, based on the paper
 
 N. J. Higham and N. Strabić, "[Anderson Acceleration of the Alternating
 Projections Method for Computing the Nearest Correlation
@@ -17,14 +15,15 @@ Manchester, UK, August 2015.
 
 The main functions are
 
+* `nearcorr_aa`: the alternating projections method for computing the
+   nearest correlation matrix with Anderson acceleration.
+
 * `nearcorr_new`: the alternating projections method for computing the
   nearest correlation matrix.  This is a version of the function at
   https://nickhigham.wordpress.com/2013/02/13/the-nearest-correlation-matrix/
-  modified to include rthe options of fixing elements and imposing a lower
-  bound on the smallest eigenvalue.
-
-* `nearcorr_aa`: the alternating projections method for computing the
-   nearest correlation matrix with Anderson acceleration.
+  that has been modified to include the options of fixing elements and
+  imposing a lower bound on the smallest eigenvalue.
+  It is given here for comparison with unaccelerated code.
 
 Other M-files:
 
