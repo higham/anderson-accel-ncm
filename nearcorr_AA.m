@@ -44,14 +44,16 @@ function [X,iter] = nearcorr_aa(A,pattern,mMax,itmax,ls_solve,delta,...
 
 %   Nick Higham and Natasa Strabic, 2015.
 
-% Set the method parameters.
+if ~isequal(A,A'), error('The matrix A must by symmetric.'), end
+n = length(A);
 
+% Set the method parameters.
 if nargin < 2, pattern = []; end
 if nargin < 3 || isempty(mMax), mMax = 2; end
 if nargin < 4 || isempty(itmax), itmax = 100; end
 if nargin < 5 || isempty(ls_solve), ls_solve = 'u'; end
 if nargin < 6 || isempty(delta), delta = 0; end
-if nargin < 7 || isempty(tol), tol = length(A)*eps; end
+if nargin < 7 || isempty(tol), tol = n*eps; end
 if nargin < 8 || isempty(droptol), droptol = 0; end
 if nargin < 9 || isempty(beta), beta = 1; end
 if nargin < 10, AAstart = 1; end
@@ -64,8 +66,6 @@ DF = []; % Storage of f-value differences, needed for 'n' and 'b' options.
 mAA = 0;
 
 % Initialization for the nearest corr. matrix problem.
-n = length(A);
-if ~isequal(A,A'), error('The matrix A must by symmetric.'), end
 Yin = A;
 Sin = zeros(n);
 
