@@ -4,7 +4,7 @@ function test_anderson(m,deltas)
 %   the smallest eigenvalue at least DELTAS(i) for two
 %   invalid correlation test matrices by the unaccelerated alternating
 %   projections method, nearcorr_new, and by using alternating
-%   projections with Anderson acceleration, nearcorr_AA, with 
+%   projections with Anderson acceleration, nearcorr_aa, with 
 %   history length M.
 %   Vector DELTAS specifies different values of the lower bound
 %   delta on the smallest eigenvalue of the solution.

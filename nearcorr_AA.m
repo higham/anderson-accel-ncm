@@ -1,17 +1,18 @@
-function [x,iter] = nearcorr_aa(x,pattern,mMax,itmax,ls_solve,delta,...
+function [X,iter] = nearcorr_aa(A,pattern,mMax,itmax,ls_solve,delta,...
                                 tol,droptol,beta,AAstart)
 %nearcorr_aa     Nearest correlation matrix with Anderson Acceleration.
-%   [Y,ITER] = nearcorr_aa(X,PATTERN,MMAX,ITMAX,LS_SOLVE,DELTA,...
+%   [X,ITER] = nearcorr_aa(A,PATTERN,MMAX,ITMAX,LS_SOLVE,DELTA,...
 %                          TOL,DROPTOL,BETA,AASTART)
-%   finds the nearest correlation matrix Y to a symmetric matrix X by
+%   finds the nearest correlation matrix X to a symmetric matrix A by
 %   the alternating projections method with Anderson acceleration.
 %   ITER is the number of iterations taken.
 %   Prescribed elements can be kept fixed by specifying them in the
-%   matrix PATTERN: the (i,j) element is 1 if the corresponding element of
-%   X is to remain fixed, else zero. By default PATTERN is empty, meaning
-%   no elements are fixed. If PATTERN is non-empty then the unit diagonal
-%   must be explicitly forced if required.
-%   The solution can be made to be positive definite with the smallest
+%   matrix PATTERN: the (i,j) element is 1 if the corresponding element 
+%   of A is to remain fixed, else zero. 
+%   By default PATTERN is empty, meaning no elements are fixed.
+%   If PATTERN is non-empty then the unit diagonal must be explicitly
+%   forced if required.
+%   The solution can forced to be positive definite with smallest
 %   eigenvalue at least DELTA, 0 < DELTA <= 1. Default: DELTA = 0.
 %   MMAX = history length parameter (non-negative integer).
 %          Default: 2.  MMAX = 0 means no acceleration.
@@ -50,13 +51,12 @@ if nargin < 3 || isempty(mMax), mMax = 2; end
 if nargin < 4 || isempty(itmax), itmax = 100; end
 if nargin < 5 || isempty(ls_solve), ls_solve = 'u'; end
 if nargin < 6 || isempty(delta), delta = 0; end
-if nargin < 7 || isempty(tol), tol = length(x)*eps; end
+if nargin < 7 || isempty(tol), tol = length(A)*eps; end
 if nargin < 8 || isempty(droptol), droptol = 0; end
 if nargin < 9 || isempty(beta), beta = 1; end
 if nargin < 10, AAstart = 1; end
 
 % Initialize the storage arrays.
-A = x; % Input matrix.
 DG = []; % Storage of g-value differences.
 DF = []; % Storage of f-value differences, needed for 'n' and 'b' options.
 
@@ -208,7 +208,7 @@ if rel_diffXY > tol && iter == itmax,
     error(['Stopped after ' num2str(itmax) ' its. Try increasing ITMAX.'])
 end
 
-x = Yin;
+X = Yin;
 
 end
 
@@ -238,11 +238,11 @@ else
 end
 end
 
-function A = proj_spd(A,delta)
+function X = proj_spd(A,delta)
 % Return the nearest positive semidefinite matrix to A with the smallest
 % eigenvalue at least delta
  
 [V,D] = eig(A);
-A = V*diag(max(diag(D),delta))*V';
-A = (A+A')/2; % Ensure symmetry.
+X = V*diag(max(diag(D),delta))*V';
+X = (X+X')/2; % Ensure symmetry.
 end

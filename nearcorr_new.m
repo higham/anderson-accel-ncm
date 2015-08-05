@@ -1,14 +1,15 @@
 function [Y,iter] = nearcorr_new(A,pattern,delta,tol,itmax)
 % nearcorr_new  Nearest correlation matrix by alternating projections.
-% [Y,ITER] = nearcorr_new(A,PATTERN,DELTA,TOL,ITMAX) finds the
-%   nearest correlation matrix to a symmetric matrix A by the 
+%   [Y,ITER] = nearcorr_new(A,PATTERN,DELTA,TOL,ITMAX) finds the
+%   nearest correlation matrix Y to a symmetric matrix A by the 
 %   alternating projections method.
 %   Prescribed elements can be kept fixed by specifying them in the
-%   matrix PATTERN: the (i,j) element is 1 if the corresponding element of
-%   X is to remain fixed, else zero. By default PATTERN is empty, meaning
-%   no elements are fixed. If PATTERN is non-empty then the unit diagonal
-%   must be explicitly forced if required.
-%   The solution can be made to be positive definite with the smallest
+%   matrix PATTERN: the (i,j) element is 1 if the corresponding element 
+%   of A is to remain fixed, else zero.
+%   By default PATTERN is empty, meaning no elements are fixed.
+%   If PATTERN is non-empty then the unit diagonal must be explicitly
+%   forced if required.
+%   The solution can be forced to be positive definite with smallest
 %   eigenvalue at least DELTA, 0 < DELTA <= 1. By default, DELTA = 0.
 %   TOL is the convergence tolerance. Default: length(A)*eps.
 %   ITMAX is the maximum number of iterations allowed. Default: 100.
@@ -16,7 +17,7 @@ function [Y,iter] = nearcorr_new(A,pattern,delta,tol,itmax)
 %   This is a modified version of nearcorr.m by Nick Higham, from
 %   https://nickhigham.wordpress.com/2013/02/13/the-nearest-correlation-matrix/
 %   This version removes the support for weights and "highly
-%   non-positive definite A"but adds the PATTERN and DELTA options.
+%   non-positive definite A" but adds the PATTERN and DELTA options.
 
 %   Nick Higham and Natasa Strabic, 2015.
 
@@ -71,11 +72,11 @@ else
 end
 end
 
-function A = proj_spd(A,delta)
+function X = proj_spd(A,delta)
 % Return the nearest positive semidefinite matrix to A with the smallest
 % eigenvalue at least delta
  
 [V,D] = eig(A);
-A = V*diag(max(diag(D),delta))*V';
-A = (A+A')/2; % Ensure symmetry.
+X = V*diag(max(diag(D),delta))*V';
+X = (X+X')/2; % Ensure symmetry.
 end
