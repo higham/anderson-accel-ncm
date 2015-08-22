@@ -1,19 +1,19 @@
 function test_anderson(m,deltas)
 %test_anderson    Test Anderson acceleration for NCM problem.
 %   test_anderson(M, DELTAS) computes the nearest correlation matrix with
-%   the smallest eigenvalue at least DELTAS(i) for two
+%   smallest eigenvalue at least DELTAS(i) for two
 %   invalid correlation test matrices by the unaccelerated alternating
-%   projections method, nearcorr_new, and by using alternating
+%   projections method, nearcorr_new, and by alternating
 %   projections with Anderson acceleration, nearcorr_aa, with 
 %   history length M.
 %   Vector DELTAS specifies different values of the lower bound
 %   delta on the smallest eigenvalue of the solution.
 %   Default: M = 2, DELTAS = [0 1e-8 0.1].
 
-if nargin < 2, deltas = [0 1e-8 0.1]; end
 if nargin < 1, m = 2; end
+if nargin < 2, deltas = [0 1e-8 0.1]; end
 
-f = get(0,'Format') % Save current format.
+f = get(0,'Format'); % Save current format.
 format shortg, format compact
 
 fprintf('*** Test matrix 1:\n')
@@ -29,7 +29,8 @@ for delta = deltas
     fprintf('--> m = %d, delta = %d\n', m, delta)
     [X,it] = nearcorr_new(A,pattern,delta);
     [XAA,itAA] = nearcorr_aa(A,pattern,m,100,'u',delta); 
-    fprintf('Iterations for NCM: standard = %d, accelerated = %d.  Reduction factor = %.2f\n', it, itAA, it/itAA)
+    fprintf(['Iterations for NCM: standard = %d, accelerated = %d.' ...
+             '  Reduction factor = %.2f\n'], it, itAA, it/itAA)
 
 end
 
@@ -50,7 +51,8 @@ for delta = deltas
     fprintf('--> m = %d, delta = %d\n', m, delta)
     [X,it] = nearcorr_new(A,pattern,delta);
     [XAA,itAA] = nearcorr_aa(A,pattern,m,100,'u',delta); 
-    fprintf('Iterations for NCM: standard = %d, accelerated = %d.  Reduction factor = %.2f\n', it, itAA, it/itAA)
+    fprintf(['Iterations for NCM: standard = %d, accelerated = %d.' ...
+             '  Reduction factor = %.2f\n'], it, itAA, it/itAA)
 
 end
 

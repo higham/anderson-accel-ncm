@@ -1,5 +1,5 @@
 function [X,iter] = nearcorr_aa(A,pattern,mMax,itmax,ls_solve,delta,...
-                                tol,droptol,beta,AAstart)
+                                tol,droptol,AAstart)
 %nearcorr_aa     Nearest correlation matrix with Anderson Acceleration.
 %   [X,ITER] = nearcorr_aa(A,PATTERN,MMAX,ITMAX,LS_SOLVE,DELTA,...
 %                          TOL,DROPTOL,BETA,AASTART)
@@ -12,42 +12,37 @@ function [X,iter] = nearcorr_aa(A,pattern,mMax,itmax,ls_solve,delta,...
 %   By default PATTERN is empty, meaning no elements are fixed.
 %   If PATTERN is non-empty then the unit diagonal must be explicitly
 %   forced if required.
-%   The solution can forced to be positive definite with smallest
+%   The solution can be forced to be positive definite with smallest
 %   eigenvalue at least DELTA, 0 < DELTA <= 1. Default: DELTA = 0.
 %   MMAX = history length parameter (non-negative integer).
 %          Default: 2.  MMAX = 0 means no acceleration.
 %   ITMAX = maximum allowable number of iterations.  Default: 100.
 %   LS_SOLVE = the least-squares solve method:
-%        'u' -- QR factorization with updating (original code, default),
-%        'n' -- normal equations,
-%        'b' -- MATLAB's backslash.
-%   TOL = convergence tolerance. Default: length(X)*eps.
+%              'u': QR factorization with updating (default),
+%              'n': normal equations,
+%              'b': MATLAB's backslash.
+%   TOL = convergence tolerance. Default: length(A)*eps.
 %   DROPTOL = tolerance for dropping stored residual vectors to improve
-%           conditioning: If DROPTOL > 0, drop residuals if the
-%           condition number exceeds DROPTOL; if DROPTOL <= 0,
-%           do not drop residuals. Default: 0.
-%   BETA = damping factor: If BETA > 0 (and BETA ~= 1), then the step is
-%       damped by BETA; otherwise, the step is not damped (default).
-%       NOTE: BETA can be a function handle; form beta(iter), where iter
-%       is the iteration number and 0 < beta(iter) <= 1.
-%   AASTART = acceleration delay factor: If AASTART > 0, start acceleration
-%         when iter = AAstart. Default: 1.
+%             conditioning. If DROPTOL > 0, drop residuals if the
+%             condition number exceeds DROPTOL; if DROPTOL <= 0,
+%             do not drop residuals. Default: 0.
+%   AASTART = acceleration delay factor: If AASTART > 0, start 
+%             acceleration when iter = AAstart. Default: 1.
 
 %   Based on the code AndAcc.m by Homer Walker dated 10/14/2011,
 %   which is listed in 
 %   Homer F. Walker, Anderson acceleration: Algorithms and implementations.
 %   Technical Report MS-6-15-50, Mathematical Sciences Department, 
 %   Worcester Polytechnic Institute, Worcester, MA 01609, USA, June 2011.
-%   The code is specialized for the alternating projections method for the
+%   This code is specialized for the alternating projections method for the
 %   nearest correlation matrix, adds two extra options for solving
 %   the least squares problem, and contains many other changes.
 
 %   Nick Higham and Natasa Strabic, 2015.
 
-if ~isequal(A,A'), error('The matrix A must by symmetric.'), end
+if ~isequal(A,A'), error('The input matrix must by symmetric.'), end
 n = length(A);
 
-% Set the method parameters.
 if nargin < 2, pattern = []; end
 if nargin < 3 || isempty(mMax), mMax = 2; end
 if nargin < 4 || isempty(itmax), itmax = 100; end
@@ -55,8 +50,7 @@ if nargin < 5 || isempty(ls_solve), ls_solve = 'u'; end
 if nargin < 6 || isempty(delta), delta = 0; end
 if nargin < 7 || isempty(tol), tol = n*eps; end
 if nargin < 8 || isempty(droptol), droptol = 0; end
-if nargin < 9 || isempty(beta), beta = 1; end
-if nargin < 10, AAstart = 1; end
+if nargin < 9, AAstart = 1; end
 
 % Initialize the storage arrays.
 DG = []; % Storage of g-value differences.
@@ -74,13 +68,13 @@ for iter = 1:itmax
     % Apply g
     [Xout,Yout,Sout] = ap_step(A,Yin,Sin,pattern,delta);
     
-    % We have to vectorize the output
+    % We have to vectorize the output.
     x = [Yin(:); Sin(:)];
     gval = [Yout(:); Sout(:)];
 
     fval = gval - x;
     
-    % Convergence test
+    % Convergence test.
     rel_diffXY = norm(Yout - Xout,'fro')/norm(Yout,'fro');
     if rel_diffXY < tol, break; end
     
@@ -95,9 +89,9 @@ for iter = 1:itmax
     % If the least-squares solves are by normal equations or backslash, we
     % need DF, the matrix of function value differences built in the same
     % way as DG.
-        if iter > AAstart,
+        if iter > AAstart
             df = fval-f_old;
-            if mAA < mMax,
+            if mAA < mMax
                 DG = [DG gval-g_old];
                 if ls_solve ~= 'u'
                     DF = [DF df];
@@ -116,20 +110,19 @@ for iter = 1:itmax
         g_old = gval;
         
         if mAA == 0
-            % If mAA == 0, update x <- g(x) to obtain the next approximate 
+            % Update x <- g(x) to obtain the next approximate 
             % solution.  This is the x1 = g(x0) line in pseudocode.
             x = gval;
         else
-        % If mAA > 0, solve the least-squares problem and update the
-        % solution.        
+            % Solve least-squares problem and update solution.        
             switch ls_solve
               case 'u' % Use the QR factors.
                 if mAA == 1
-                % If mAA == 1, form the initial QR decomposition.
+                % Form the initial QR decomposition.
                     R(1,1) = norm(df);
                     Q = R(1,1)\df;
                 else
-                % If mAA > 1, update the QR decomposition.
+                % Update the QR decomposition.
                     if mAA > mMax
                     % If the column dimension of Q is mMax, delete
                     % the first column and update the decomposition.
@@ -239,8 +232,8 @@ end
 end
 
 function X = proj_spd(A,delta)
-% Return the nearest positive semidefinite matrix to A with the smallest
-% eigenvalue at least delta
+% Return the nearest positive semidefinite matrix to A with smallest
+% eigenvalue at least delta.
  
 [V,D] = eig(A);
 X = V*diag(max(diag(D),delta))*V';

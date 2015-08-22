@@ -2,7 +2,7 @@ function [Y,iter] = nearcorr_new(A,pattern,delta,tol,itmax)
 % nearcorr_new  Nearest correlation matrix by alternating projections.
 %   [Y,ITER] = nearcorr_new(A,PATTERN,DELTA,TOL,ITMAX) finds the
 %   nearest correlation matrix Y to a symmetric matrix A by the 
-%   alternating projections method.
+%   alternating projections method.  ITER is the number of iterations taken.
 %   Prescribed elements can be kept fixed by specifying them in the
 %   matrix PATTERN: the (i,j) element is 1 if the corresponding element 
 %   of A is to remain fixed, else zero.
@@ -21,13 +21,13 @@ function [Y,iter] = nearcorr_new(A,pattern,delta,tol,itmax)
 
 %   Nick Higham and Natasa Strabic, 2015.
 
-if ~isequal(A,A'), error('A must by symmetric.'), end
+if ~isequal(A,A'), error('The input matrix must by symmetric.'), end
 if nargin < 2, pattern = []; end
 if nargin < 3 || isempty(delta), delta = 0; end
 if nargin < 4 || isempty(tol), tol = length(A)*eps; end
 if nargin < 5, itmax = 100; end
 
-X = A; Y = A;
+Y = A;
 iter = 0;
 rel_diffXY = inf;
 dS = zeros(size(A));
@@ -73,8 +73,8 @@ end
 end
 
 function X = proj_spd(A,delta)
-% Return the nearest positive semidefinite matrix to A with the smallest
-% eigenvalue at least delta
+% Return the nearest positive semidefinite matrix to A with thesmallest
+% eigenvalue at least delta.
  
 [V,D] = eig(A);
 X = V*diag(max(diag(D),delta))*V';
