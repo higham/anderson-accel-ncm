@@ -73,7 +73,7 @@ end
 end
 
 function X = proj_spd(A,delta)
-% Return the nearest positive semidefinite matrix to A with thesmallest
+% Return the nearest positive semidefinite matrix to A with the smallest
 % eigenvalue at least delta.
  
 [V,D] = eig(A);
