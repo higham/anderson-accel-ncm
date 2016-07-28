@@ -9,9 +9,8 @@ About
 
 N. J. Higham and N. Strabić, "[Anderson Acceleration of the Alternating
 Projections Method for Computing the Nearest Correlation
-Matrix](http://eprints.ma.man.ac.uk/2360)", MIMS EPrint 2015.39,
-Manchester Institute for Mathematical Sciences, The University of
-Manchester, UK, August 2015; to appear in Numerical Algorithms.
+Matrix](http://link.springer.com/article/10.1007/s11075-015-0078-3)",
+Numer. Alg., 72(4):1021-1042, 2016.
 
 The main functions are
 
